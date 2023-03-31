@@ -1,0 +1,16 @@
+.pago-facil-logo {
+    width: 160px;
+    height: 160px;
+    margin-top: 0px;
+    display: block;
+    position: relative;
+    float: right;
+    background-image: url('https://www.planx5.com//web/sites/all/themes/alfa202001/img/comun/logo-pago-facil-1.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+}
+
+.bloque {
+    background-color: yellow;
+}

@@ -1,0 +1,16 @@
+
+.IngresoAuto {
+    background-color: orange;
+    margin: 0px 300px 0px 300px;
+}
+
+
+
+h2 {
+    font-weight: bolder;
+    color: blueviolet;
+}
+input {
+    width: 40%;
+    margin-bottom: 10px;
+}

@@ -1,0 +1,27 @@
+.Administrador {
+    
+   
+    height: 400px;
+    align-items: center;
+}
+
+.icon1 {
+    width: 200px;
+    height: 300px;
+    color:#e12129 ;
+    
+}
+
+.icon1:hover {
+    color:violet;
+    transition: 1s;
+    transition-timing-function: ease-in-out;
+}
+
+
+.LOGOUT:hover {
+    color:white;
+    background-color: red;
+    transition: 1s;
+    transition-timing-function: ease-in-out;
+}

@@ -1,0 +1,38 @@
+.icon {
+    height: 40px;
+    width: 40px;
+}
+
+
+.icon2 {
+    height: 80px;
+    width: 80px;
+    color: white;
+    background-color: #e12129;
+    border: solid 1px red;
+    border-radius: 100%;
+    margin: 10px;
+    padding: 10px;
+    
+}
+
+.icon2:hover:hover {
+    transform: scale(1.2); 
+    transition-duration: 400ms;
+    opacity: 0.7;
+    transition-timing-function: ease-in-out;
+  }
+
+
+.icon3 {
+    width: 80px;
+    height: 80px;
+    color: green;
+}
+
+.icon3:hover {
+    transform: scale(1.2); 
+    transition-duration: 400ms;
+    opacity: 0.7;
+    color: red;
+}
