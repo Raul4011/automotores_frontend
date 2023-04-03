@@ -6,11 +6,12 @@ import '../Css/IngresoAuto.css'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
-import { JWT_CARS } from "../constants/constants";
+import { ADMIN_CREATE_VEHICULE, ADMIN_GET_VEHICULES, JWT_CARS } from "../constants/constants";
+import { scrollTop } from "../utils/ScrollTopUtil";
 
 const IngresoAuto = () => {
   let navigate = useNavigate();
-  const BASE_URL = "http://localhost:8000/vehiculos/";
+  
   const token = localStorage.getItem(JWT_CARS)
 
   const [marca, setMarca] = useState("");
@@ -25,7 +26,7 @@ const IngresoAuto = () => {
   const [listado, setListado] = useState([])
 
   const getAutos = () => {
-    axios.get(BASE_URL,{
+    axios.get(ADMIN_GET_VEHICULES,{
       headers:{
         'Authorization': `Bearer ${token}`
       }
@@ -42,7 +43,7 @@ const IngresoAuto = () => {
 
     e.preventDefault();
     let nuevoAuto = axios
-      .post(BASE_URL, {
+      .post(ADMIN_CREATE_VEHICULE, {
         marca: marca,
         modelo: modelo,
         anio: anio,
@@ -66,6 +67,7 @@ const IngresoAuto = () => {
   };
 
   useEffect(() => {
+    scrollTop()
     getAutos()
   }, [])
 

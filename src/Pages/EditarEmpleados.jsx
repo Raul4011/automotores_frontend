@@ -4,12 +4,16 @@ import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { ADMIN_GET_EMPLOYEES, ADMIN_PUT_EMPLOYEE, JWT_CARS } from "../constants/constants";
+import { scrollTop } from "../utils/ScrollTopUtil";
 import '../Css/EditEmpleado.css'
 
 const EditarEmpleado = () => {
   let navigate = useNavigate()
-  const BASE_URL = "http://localhost:8000/empleados/";
+  
   let { id } = useParams();
+
+  const token = localStorage.getItem(JWT_CARS)
 
   const [nomyape, setNomyApe] = useState("");
   const [direccion, setDireccion] = useState("");
@@ -22,8 +26,10 @@ const EditarEmpleado = () => {
   const [email, setEmail] = useState("");
 
   const getEmpleado = () => {
-    axios.get(BASE_URL + id).then((resp) => {
-      console.log(resp.data)
+    axios.get(ADMIN_GET_EMPLOYEES + id ,{headers:{
+      'Authorization': `Bearer ${token}`
+    }}).then((resp) => {
+      //console.log(resp.data)
       setNomyApe(resp.data[0].nomyape)
       setDireccion(resp.data[0].direccion)
       setLocalidad(resp.data[0].localidad)
@@ -36,8 +42,8 @@ const EditarEmpleado = () => {
     });
   };
 
-  const EditEmpleado = async () => {
-    let editar = await axios.put(BASE_URL + id, {
+  const EditEmpleado = () => {
+    let editar =  axios.put( ADMIN_PUT_EMPLOYEE + id, {
       nomyape: nomyape,
       direccion: direccion,
       localidad: localidad,
@@ -47,16 +53,19 @@ const EditarEmpleado = () => {
       fechaIngreso: fechaIngreso,
       fechaNac: fechNac,
       email: email,
-    });
+    },{headers:{
+      'Authorization': `Bearer ${token}`
+    }});
     if (editar) {
       alert('se Editaron los valores correctamente')
       //axios.get()
       navigate('/admin/empleados',{ replace: true })
     }
-    window.location.assign('/admin/empleados');
+    //window.location.assign('/admin/empleados');
   };
 
   useEffect(() => {
+    scrollTop();
     getEmpleado();
   }, []);
 

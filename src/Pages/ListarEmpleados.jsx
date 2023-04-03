@@ -5,28 +5,36 @@ import { Link } from "react-router-dom";
 import { BiTrash, BiPencil } from "react-icons/bi";
 import { FaEye } from "react-icons/fa";
 import Header from "../components/Header";
+import { ADMIN_GET_EMPLOYEES, ADMIN_REMOVE_EMPLOYEE, JWT_CARS } from "../constants/constants";
+import { scrollTop } from "../utils/ScrollTopUtil";
 
 const ListarEmpleados = () => {
 
-    const BASE_URL = "http://localhost:8000/empleados/";
-
     const [empleados,setEmpleados] = useState([])
 
+    const token = localStorage.getItem(JWT_CARS)
+
     const getEmpleados = () =>{
-        axios.get(BASE_URL).then(resp=>{
+        axios.get(ADMIN_GET_EMPLOYEES,{headers:{
+          'Authorization': `Bearer ${token}`
+        }}).then(resp=>{
             setEmpleados(resp.data)
         })
     }
 
-    const borrarEmpleado = async(id) =>{
+    const borrarEmpleado = (id) =>{
       let eliminarEmpleado = prompt(
-        "Estas seguro que quieres eliminar este vehiculo si/no"
+        "Estas seguro que quieres eliminar este Empleado si/no"
       );
       if (eliminarEmpleado==='si' || eliminarEmpleado==='S'  || eliminarEmpleado==='SI'  || eliminarEmpleado==='s') {
-        let eliminar = await axios.delete(BASE_URL + id);
+        let eliminar = axios.delete(ADMIN_REMOVE_EMPLOYEE + id , {headers:{
+          'Authorization': `Bearer ${token}`
+        }});
         if (eliminar) {
-          alert("Auto eliminado correctamente");
-          axios.get(BASE_URL).then((resp) => {
+          alert("Empleado eliminado correctamente");
+          axios.get(ADMIN_GET_EMPLOYEES , {headers:{
+            'Authorization': `Bearer ${token}`
+          }}).then((resp) => {
             setEmpleados(resp.data);
           });
         }
@@ -34,13 +42,11 @@ const ListarEmpleados = () => {
         return
       }
     }
-    const scroll =() => {
-      window.scrollTo({ top: 0, left: 0, behavior: undefined });
-    }
+  
 
     useEffect(()=>{
-      scroll()
-        getEmpleados()
+      scrollTop()
+      getEmpleados()
     },[])
 
   return (
@@ -73,6 +79,7 @@ const ListarEmpleados = () => {
               <th scope="col">#</th>
               <th scope="col">Nombre y Apellido</th>
               <th scope="col">Direccion</th>
+              <th scope="col">Localidad y Provincia</th>
               <th scope="col">Cuil</th>
               <th scope="col">Telefono</th>
               <th scope="col">Fecha Ingreso</th>
@@ -90,6 +97,7 @@ const ListarEmpleados = () => {
                   <th scope="row d-flex ">{item.id}</th>
                   <td>{item.nomyape}</td>
                   <td>{item.direccion}</td>
+                  <td>{item.localidad} <br /> {item.provincia}</td>
                   <td>{item.cuil}</td>
                   <td>{item.tel}</td>
                   <td>{item.fechaIngreso}</td>
@@ -107,7 +115,11 @@ const ListarEmpleados = () => {
                         <BiPencil />
                       </button>
                     </Link>
-                    
+                    <Link to={`/admin/empleados/ver/${item.id}`}>
+                      <button className="btn btn-success">
+                        <FaEye />
+                      </button>
+                    </Link>
                   </td>
                 </>
               </tr>

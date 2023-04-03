@@ -5,34 +5,36 @@ import { Link } from "react-router-dom";
 import { BiTrash, BiPencil } from "react-icons/bi";
 import { FaEye } from "react-icons/fa";
 import Header from "../components/Header";
-import { JWT_CARS } from "../constants/constants";
+import { ADMIN_GET_VEHICULES, ADMIN_REMOVE_VEHICULE, JWT_CARS } from "../constants/constants";
+import { scrollTop } from "../utils/ScrollTopUtil";
 
 const ListarVehiculos = () => {
-  const BASE_URL = "http://localhost:8000/vehiculos/admin";
-  const token = localStorage.getItem(JWT_CARS)
+  
+  const token = localStorage.getItem(JWT_CARS)//obteniendo el token guardado
 
   const [autos, setAutos] = useState([]);
+  
+  const headers = {
+    'Authorization': `Bearer ${token}`
+  };
 
   const getAutos = () => {
-    axios.get(BASE_URL,{
-      headers:{
-        'Authorization': `Bearer ${token}`
-      }
-    }).then((resp) => {
+    axios.get(ADMIN_GET_VEHICULES,{headers})
+      .then((resp) => {
       console.log(resp);
       setAutos(resp.data);
     });
   };
 
-  const eliminar = async (id) => {
+  const eliminar =  (id) => {
     let eliminarAuto = prompt(
       "Estas seguro que quieres eliminar este vehiculo si/no"
     );
     if (eliminarAuto==='si' || eliminarAuto==='S'  || eliminarAuto==='SI'  || eliminarAuto==='s') {
-      let eliminar = await axios.delete(BASE_URL + id);
+      let eliminar = axios.delete(ADMIN_REMOVE_VEHICULE + id,{headers});
       if (eliminar) {
         alert("Auto eliminado correctamente");
-        axios.get(BASE_URL).then((resp) => {
+        axios.get(ADMIN_GET_VEHICULES,{headers}).then((resp) => {
           setAutos(resp.data);
         });
       }
@@ -41,12 +43,10 @@ const ListarVehiculos = () => {
     }
   };
 
-  const scroll =() => {
-    window.scrollTo({ top: 0, left: 0, behavior: undefined });
-  }
+  
 
   useEffect(() => {
-    scroll();
+    scrollTop();
     getAutos();
   }, []);
 

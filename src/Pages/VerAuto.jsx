@@ -5,10 +5,12 @@ import axios from "axios";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Card, Button } from "react-bootstrap";
-import { JWT_CARS } from "../constants/constants";
+import { ADMIN_GET_VEHICULES, JWT_CARS } from "../constants/constants";
+import { scrollTop } from "../utils/ScrollTopUtil"
 
 const VerAuto = () => {
-  const BASE_URL = "http://localhost:8000/vehiculos/admin";
+
+  
   const { id } = useParams();
   const token = localStorage.getItem(JWT_CARS)
 
@@ -25,7 +27,7 @@ const VerAuto = () => {
   const getCar = () => {
 
 
-    axios.get(BASE_URL + id, {
+    axios.get(ADMIN_GET_VEHICULES + id, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -42,12 +44,8 @@ const VerAuto = () => {
     });
   };
 
-  const scroll = () => {
-    window.scrollTo({ top: 0, left: 0, behavior: undefined });
-  }
-
   useEffect(() => {
-    scroll();
+    scrollTop()
     getCar();
 
   }, []);
@@ -62,7 +60,6 @@ const VerAuto = () => {
         <br />
         <br />
         <Card style={{ width: "40rem" }} className="m-auto">
-
           <Card.Img variant="top" src={imagen} />
           <Card.Body className="text-center">
             <Card.Title className="text-primary">
@@ -78,7 +75,6 @@ const VerAuto = () => {
           <Link to='/admin/vehiculos' className="text-center">
             <Button className="btn btn-block btn-success">Volver</Button>
           </Link>
-
         </Card>
         <br />
         <br />

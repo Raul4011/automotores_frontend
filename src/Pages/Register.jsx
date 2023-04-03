@@ -6,23 +6,22 @@ import { Form,Button } from "react-bootstrap";
 import "./Register.css"
 import { Link,useNavigate } from "react-router-dom";
 import axios from 'axios'
+import { USUARIOS, USUARIOS_CREATE } from "../constants/constants";
 
 const Register = () => {
-  let navigate = useNavigate()
 
-  const BASE_URL = "http://localhost:8000/usuarios/"
+  let navigate = useNavigate()
 
   const [user,setUser] = useState('')
   const [pass,setPass] = useState('')
   const [mail,setMail] = useState('')
   const [dir,setDir] = useState('')
   const [tel,setTel] = useState(null)
-
-
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let guardar  = axios.post('http://localhost:8000/usuarios',{
+    let guardar  = axios.post( USUARIOS_CREATE ,{
       usuario : user,
       direccion : dir,
       telefono : tel,
@@ -36,7 +35,7 @@ const Register = () => {
   }
   
   useEffect(()=>{
-    axios.get(BASE_URL).then(resp=>console.log(resp.data))
+    axios.get(USUARIOS).then(resp=>console.log(resp.data))
   },[])
 
   return (

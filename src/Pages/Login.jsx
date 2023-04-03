@@ -6,16 +6,12 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useAuthContext } from "../context/authContext";
 import Swal from 'sweetalert2'
+import { USUARIOS, USUARIOS_LOGIN } from "../constants/constants";
+
 
 const Login = () => {
 
   const { login , jwtLogin } = useAuthContext()
-
-
-  //const navigate = useNavigate()
-
-  const BASE_URL2 = "http://localhost:8000/usuarios/";
-  const BASE_URL_USERS = "http://localhost:8000/Usuarios/login"
 
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState("");
@@ -24,7 +20,7 @@ const Login = () => {
   const Submit = async (e) => {
     e.preventDefault()
 
-    await axios.post(BASE_URL_USERS, {
+    await axios.post(USUARIOS_LOGIN, {
       usuario: user,
       password: pass
     })
@@ -38,6 +34,8 @@ const Login = () => {
         login()
         console.log(resp.data)
         jwtLogin(resp.data.token)
+        //verificarSesion()
+
       })
       .catch(error => {
         Swal.fire({
@@ -46,9 +44,10 @@ const Login = () => {
           text: 'Administrador No Encontrado',
           footer: '<a href="">Intenta Nuevamente</a>'
         })
-
+        
         console.log(error)
       })
+   
     e.target.reset()
     return
     /*
@@ -71,17 +70,13 @@ const Login = () => {
   }
   traerUser(user)
   e.target.reset()*/
-
-
-
   };
 
   const getLogin = () => {
-    axios.get(BASE_URL2).then((resp) => {
+    axios.get(USUARIOS).then((resp) => {
       setUsers(resp.data)
       //console.log(resp.data)
     });
-    //console.log(users);
   };
 
   useEffect(() => {

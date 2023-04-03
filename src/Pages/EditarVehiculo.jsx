@@ -5,16 +5,15 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import '../Css/EditVehiculo.css'
-import { JWT_CARS } from "../constants/constants";
-
+import { ADMIN_GET_VEHICULES, ADMIN_PUT_VEHICULE, JWT_CARS } from "../constants/constants";
+import { scrollTop } from "../utils/ScrollTopUtil";
 
 const EditarVehiculo = () => {
 
- 
 
-  const BASE_URL = "http://localhost:8000/vehiculos/";
   let { id } = useParams();
   let navigate = useNavigate()
+  
   const token = localStorage.getItem(JWT_CARS)
 
   const [marca, setMarca] = useState("");
@@ -28,7 +27,7 @@ const EditarVehiculo = () => {
   const [color,setColor] = useState('')
 
   const getVehicule = () => {
-    axios.get(BASE_URL + id,{headers:{
+    axios.get(ADMIN_GET_VEHICULES + id,{headers:{
       'Authorization': `Bearer ${token}`
     }}).then((resp) => {
       console.log(resp.data);
@@ -44,13 +43,13 @@ const EditarVehiculo = () => {
     });
   };
 
-  const EditVehiculo = async () => {
+  const EditVehiculo =  () => {
 
     const headers = {
       'Authorization': `Bearer ${token}`
     };
 
-    let editar = await axios.put(BASE_URL + id, {
+    let editar = axios.put(ADMIN_PUT_VEHICULE + id, {
       marca: marca,
       modelo: modelo,
       anio: anio,
@@ -68,13 +67,8 @@ const EditarVehiculo = () => {
     window.location.assign('/admin/vehiculos/');
   };
 
-  const scroll =() => {
-    window.scrollTo({ top: 0, left: 0, behavior: undefined });
-  }
-
   useEffect(() => {
-    scroll();
-    
+    scrollTop();
     getVehicule()
   }, []);
 
@@ -87,6 +81,7 @@ const EditarVehiculo = () => {
       <br />
         <div className="editVehiculo">
           <div className="row mt-5">
+            
             <div className="col-6">
               <h2 className="text-danger">Valores a editar</h2>
             

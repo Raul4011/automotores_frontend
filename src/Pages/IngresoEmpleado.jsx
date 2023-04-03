@@ -5,13 +5,14 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import '../Css/IngresoEmpleado.css'
 import { Link,useNavigate } from 'react-router-dom'
+import { ADMIN_CREATE_EMPLOYEE, ADMIN_GET_EMPLOYEES, JWT_CARS } from '../constants/constants'
 
 
 const IngresoEmpleado = () => {
 
   let navigate = useNavigate();
 
-  const BASE_URL = "http://localhost:8000/empleados/";
+  const token = localStorage.getItem(JWT_CARS)
 
   const [nomyape, setNomyApe] = useState('')
   const [dir, setDir] = useState('')
@@ -25,7 +26,9 @@ const IngresoEmpleado = () => {
   const [listado,setListado]=useState([])
 
   const getEmpleados = () =>{
-    axios.get(BASE_URL).then(resp=>{
+    axios.get(ADMIN_GET_EMPLOYEES , {headers:{
+      'Authorization': `Bearer ${token}`
+    }}).then(resp=>{
       setListado(resp.data)
     })
    
@@ -34,7 +37,7 @@ const IngresoEmpleado = () => {
   const createEmployee = (e) => {
     e.preventDefault();
     let nuevoEmpleado = axios
-      .post(BASE_URL, {
+      .post(ADMIN_CREATE_EMPLOYEE, {
         nomyape,
         direccion:dir,
         localidad:loc,
@@ -42,9 +45,11 @@ const IngresoEmpleado = () => {
         cuil,
         tel,
         fechaIngreso,
-        fechaNac: fechaNac,
+        fechaNac,
         email
-      })
+      },{headers:{
+        'Authorization': `Bearer ${token}`
+      }})
       .then((resp) => {
         setListado([...listado, resp.data])
       })
@@ -131,7 +136,7 @@ useEffect(()=>{
             />
             <br />
             <input
-              type="tel"
+              type="text"
               placeholder="ingresa la Fecha de Ingreso"
               onChange={(e) => setFechaIngreso(e.target.value)}
               className='input1'

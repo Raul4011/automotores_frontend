@@ -6,25 +6,24 @@ import { useState, useEffect } from "react";
 import { Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom"
 import '../Css/Vehiculos.css'
+import { motion } from "framer-motion"
+import { PUBLIC_VEHICULES } from "../constants/constants";
+import { scrollTop } from "../utils/ScrollTopUtil";
 
 const Vehiculos = () => {
-  const BASE_URL = "http://localhost:8000/vehiculos/";
+  
   const [autos, setAutos] = useState([]);
 
 
   const getAutos = () => {
-    axios.get(BASE_URL).then((resp) => {
+    axios.get(PUBLIC_VEHICULES).then((resp) => {
       setAutos(resp.data)
       //console.log(resp.data);
     });
   };
 
-  const scroll = () => {
-    window.scrollTo({ top: 0, left: 0, behavior: undefined });
-  }
-
   useEffect(() => {
-    scroll();
+    scrollTop();
     getAutos();
   }, []);
 
@@ -43,7 +42,7 @@ const Vehiculos = () => {
         <div className="row">
           {autos.map((auto) => (
             <>
-              <div className="col-md-6 col-sm-12 col-xl-6 text-center ">
+              <motion.div className="col-md-6 col-sm-12 col-xl-6 text-center " whileHover={{ scale: 1.05 }}>
                 <Card style={{ width: "40rem" }}>
                   <Card.Img variant="top" src={auto.imagen} className='ImagenAuto' />
                   <Card.Body>
@@ -68,7 +67,7 @@ const Vehiculos = () => {
                   </Card.Body>
                 </Card>
                 <br /><br />
-              </div>
+              </motion.div>
             </>
           ))}
         </div>

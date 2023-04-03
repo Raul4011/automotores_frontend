@@ -5,15 +5,19 @@ import { Link } from "react-router-dom";
 import { BiTrash, BiPencil } from "react-icons/bi";
 import { FaEye } from "react-icons/fa";
 import Header from "../components/Header";
+import { ADMIN_GET_CONSULTAS, ADMIN_REMOVE_CONSULTAS, JWT_CARS } from "../constants/constants";
+import { scrollTop } from "../utils/ScrollTopUtil";
 
 const ListarConsultas = () => {
 
-    const BASE_URL = "http://localhost:8000/consultas/";
+    const token = localStorage.getItem(JWT_CARS)
 
     const [consultas,setConsultas] = useState([])
 
     const getConsultas = () =>{
-        axios.get(BASE_URL).then(resp=>{
+        axios.get(ADMIN_GET_CONSULTAS , {headers:{
+          'Authorization': `Bearer ${token}`
+        }}).then(resp=>{
             setConsultas(resp.data)
         })
     }
@@ -23,10 +27,10 @@ const ListarConsultas = () => {
         "Estas seguro que quieres eliminar este vehiculo si/no"
       );
       if (eliminarEmpleado==='si' || eliminarEmpleado==='S'  || eliminarEmpleado==='SI'  || eliminarEmpleado==='s') {
-        let eliminar = await axios.delete(BASE_URL + id);
+        let eliminar = await axios.delete(ADMIN_REMOVE_CONSULTAS + id);
         if (eliminar) {
           alert("Auto eliminado correctamente");
-          axios.get(BASE_URL).then((resp) => {
+          axios.get(ADMIN_GET_CONSULTAS).then((resp) => {
             setConsultas(resp.data);
           });
         }
@@ -34,12 +38,9 @@ const ListarConsultas = () => {
         return
       }
     }
-    const scroll =() => {
-      window.scrollTo({ top: 0, left: 0, behavior: undefined });
-    }
 
     useEffect(()=>{
-      scroll()
+        scrollTop()
         getConsultas()
     },[])
 
@@ -56,7 +57,6 @@ const ListarConsultas = () => {
             <h2>Listado de Consultas</h2>
           </div>
           <div className="col-3">
-           
           </div>
           <div className="col-2">
             <Link to="/admin">
@@ -75,11 +75,9 @@ const ListarConsultas = () => {
               <th scope="col">Email</th>
               <th scope="col">Fecha Consulta</th>
               <th scope="col">Descripcion</th>
-              
             </tr>
           </thead>
           <tbody>
-            
             {consultas.map((item) => (
               <tr>
                 <>
@@ -90,7 +88,6 @@ const ListarConsultas = () => {
                   <td>{item.email}</td>
                   <td>{item.fechaConsulta}</td>
                   <td>{item.descripcion}</td>
-                 
                 </>
               </tr>
             ))}
